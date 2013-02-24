@@ -266,7 +266,7 @@ font_rsrc_create
     goto error;
   }
   font->sys = sys;
-  FONT(system_ref_put(sys));
+  FONT(system_ref_get(sys));
   ref_init(&font->ref);
 
   if(path) {

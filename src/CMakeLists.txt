@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(font-rsrc C)
+enable_testing()
 
 ################################################################################
 # Setup compiler
@@ -32,11 +33,20 @@ endif()
 include_directories(${SNLSYS_INCLUDE_DIR})
 
 ################################################################################
-# Define target
+# Define targets
 ################################################################################
 add_library(font-rsrc SHARED font_rsrc.c font_rsrc.h)
 target_link_libraries(font-rsrc ${SNLSYS_LIBRARY} ${FREETYPE_LIBRARIES})
 set_target_properties(font-rsrc PROPERTIES DEFINE_SYMBOL FONT_SHARED_BUILD)
+
+################################################################################
+# Tests
+################################################################################
+add_executable(test_font_rsrc test_font_rsrc.c)
+target_link_libraries(test_font_rsrc font-rsrc)
+
+# TODO
+#add_test(font_rsrc test_font_rsrc ../etc/MyFont.ttf)
 
 ################################################################################
 # Files to install
