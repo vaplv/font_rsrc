@@ -1,4 +1,5 @@
 #include "font_rsrc.h"
+#include <snlsys/image.h>
 #include <snlsys/mem_allocator.h>
 #include <snlsys/snlsys.h>
 #include <stdbool.h>
@@ -126,7 +127,7 @@ main(int argc, char** argv)
     }
     CHECK(font_glyph_get_bitmap(glyph, true, &w, &h, &Bpp, buffer), OK);
     NCHECK(snprintf(buf, BUFSIZ, "/tmp/%.3d.ppm", i - 32), BUFSIZ);
-//    CHECK(rsrc_write_ppm(sys, buf, w, h, Bpp, buffer), OK);
+    CHECK(image_ppm_write(buf, w, h, Bpp, buffer), 0);
     CHECK(font_glyph_ref_put(glyph), OK);
   }
   MEM_FREE(&mem_default_allocator, buffer);
