@@ -45,8 +45,9 @@ set_target_properties(font-rsrc PROPERTIES DEFINE_SYMBOL FONT_SHARED_BUILD)
 add_executable(test_font_rsrc test_font_rsrc.c)
 target_link_libraries(test_font_rsrc font-rsrc)
 
-# TODO
-#add_test(font_rsrc test_font_rsrc ../etc/MyFont.ttf)
+add_test(font_rsrc_6x12-iso8859-1 test_font_rsrc ../etc/6x12-iso8859-1.fon)
+add_test(font_rsrc_8x13-iso8558-1 test_font_rsrc ../etc/8x13-iso8859-1.fon)
+add_test(font_rsrc_TowerPrint test_font_rsrc ../etc/Tower_Print.ttf)
 
 ################################################################################
 # Files to install
