@@ -34,6 +34,10 @@ enum font_error {
  ******************************************************************************/
 struct font_system;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 FONT_API enum font_error
 font_system_create
   (struct mem_allocator* allocator, /* May be NULL */
@@ -47,12 +51,20 @@ FONT_API enum font_error
 font_system_ref_put
   (struct font_system* sys);
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
 /*******************************************************************************
  *
  * Font resource
  *
  ******************************************************************************/
 struct font_rsrc; /* Font resource */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 FONT_API enum font_error
 font_rsrc_create
@@ -89,6 +101,10 @@ font_rsrc_is_scalable
   (const struct font_rsrc* font,
    bool* is_scalable);
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
 /*******************************************************************************
  *
  * Font glygh
@@ -105,6 +121,10 @@ struct font_glyph_desc {
   size_t width;
   wchar_t character;
 };
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 FONT_API enum font_error
 font_rsrc_get_glyph
@@ -133,6 +153,10 @@ FONT_API enum font_error
 font_glyph_get_desc
   (const struct font_glyph* glyph,
    struct font_glyph_desc* desc);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* FONT_RSRC_H */
 
