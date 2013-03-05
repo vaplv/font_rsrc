@@ -14,7 +14,7 @@
 #ifndef NDEBUG
   #define FONT(func) ASSERT(FONT_NO_ERROR == font_##func)
 #else
-  #define FONT(func) cmdsys_##func
+  #define FONT(func) font_##func
 #endif /* NDEBUG */
 
 struct mem_allocator;

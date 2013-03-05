@@ -140,6 +140,8 @@ release_font_system(struct ref* ref)
   sys = CONTAINER_OF(ref, struct font_system, ref);
 
   FT_Error ft_err = 0;
+  (void)ft_err;
+
   ft_err = FT_Done_FreeType(sys->ft_handle);
   ASSERT(!ft_err);
   MEM_FREE(sys->allocator, sys);
