@@ -507,12 +507,18 @@ font_glyph_get_desc
 {
   if(!glyph || !desc)
     return FONT_INVALID_ARGUMENT;
+
   desc->character = glyph->character;
   desc->bbox.x_min = glyph->bbox.x_min;
   desc->bbox.y_min = glyph->bbox.y_min;
   desc->bbox.x_max = glyph->bbox.x_max;
   desc->bbox.y_max = glyph->bbox.y_max;
-  desc->width = (glyph->ft_glyph->advance.x) >> 16; /* 16.16 Fixed point */
+
+  /* 16.16 Fixed point */
+  const signed long ft_width = (glyph->ft_glyph->advance.x) >> 16;
+
+  ASSERT(ft_width <= UINT16_MAX);
+  desc->width =  ft_width;
   return FONT_NO_ERROR;
 }
 

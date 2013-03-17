@@ -3,7 +3,6 @@
 
 #include <snlsys/snlsys.h>
 #include <stdbool.h>
-#include <stddef.h>
 
 #if defined(FONT_SHARED_BUILD)
   #define FONT_API EXPORT_SYM
@@ -118,7 +117,7 @@ struct font_glyph_desc {
     int x_max;
     int y_max;
   } bbox;
-  size_t width;
+  uint16_t width;
   wchar_t character;
 };
 
