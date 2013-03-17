@@ -54,3 +54,8 @@ add_test(font_rsrc_TowerPrint test_font_rsrc ../etc/Tower_Print.ttf)
 ################################################################################
 install(TARGETS font-rsrc LIBRARY DESTINATION lib)
 install(FILES font_rsrc.h DESTINATION include)
+install(FILES 
+  ../etc/6x12-iso8859-1.fon 
+  ../etc/8x13-iso8859-1.fon
+  ../etc/Tower_Print.ttf
+  DESTINATION etc/font/)
