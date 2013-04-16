@@ -11,7 +11,7 @@ endif(NOT CMAKE_COMPILER_IS_GNUCC)
 
 set(CMAKE_DEBUG_POSTFIX "-dbg")
 
-set(CMAKE_C_FLAGS "-pedantic -std=c99 -Wall -Wextra -Wcast-align -Wmissing-declarations -Wmissing-prototypes -fvisibility=hidden -fstrict-aliasing -Wl,-z,defs")
+set(CMAKE_C_FLAGS "-pedantic -std=c99 -Wall -Wextra -Wcast-align -Wmissing-declarations -Wmissing-prototypes -fvisibility=hidden -fstrict-aliasing -Wl,-z,defs -Wconversion")
 set(CMAKE_C_FLAGS_DEBUG "-g -DDEBUG")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 
@@ -23,6 +23,7 @@ include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
 
 find_path(SNLSYS_INCLUDE_DIR "snlsys/snlsys.h")
 find_library(SNLSYS_LIBRARY NAMES snlsys)
+find_library(SNLSYS_DBG_LIBRARY NAMES snlsys-dbg)
 
 if(NOT SNLSYS_INCLUDE_DIR OR NOT SNLSYS_LIBRARY)
   message(FATAL_ERROR "Can't find snlsys headers/library")
@@ -36,7 +37,9 @@ include_directories(${SNLSYS_INCLUDE_DIR})
 # Define targets
 ################################################################################
 add_library(font-rsrc SHARED font_rsrc.c font_rsrc.h)
-target_link_libraries(font-rsrc ${SNLSYS_LIBRARY} ${FREETYPE_LIBRARIES})
+target_link_libraries(font-rsrc ${FREETYPE_LIBRARIES})
+target_link_libraries(font-rsrc debug ${SNLSYS_DBG_LIBRARY})
+target_link_libraries(font-rsrc optimized ${SNLSYS_LIBRARY})
 set_target_properties(font-rsrc PROPERTIES DEFINE_SYMBOL FONT_SHARED_BUILD)
 
 ################################################################################

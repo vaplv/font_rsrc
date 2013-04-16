@@ -90,9 +90,10 @@ main(int argc, char** argv)
   NCHECK(h, 0);
   NCHECK(Bpp, 0);
 
-  buffer = MEM_CALLOC(&mem_default_allocator, w*h*Bpp, sizeof(unsigned char));
+  buffer = MEM_CALLOC
+    (&mem_default_allocator, (size_t)w*h*Bpp, sizeof(unsigned char));
   NCHECK(buffer, NULL);
-  buffer_size = w * h * Bpp * sizeof(unsigned char);
+  buffer_size = (size_t)(w * h * Bpp) * sizeof(unsigned char);
 
   CHECK(font_glyph_get_bitmap(glyph, false, NULL, NULL, NULL, buffer), OK);
   CHECK(font_glyph_get_bitmap(glyph, false, &w, NULL, NULL, buffer), OK);
@@ -119,7 +120,7 @@ main(int argc, char** argv)
     CHECK(font_rsrc_get_glyph(font, (wchar_t)i, &glyph), OK);
 
     CHECK(font_glyph_get_bitmap(glyph, true, &w, &h, &Bpp, NULL), OK);
-    required_buffer_size = w * h * Bpp * sizeof(unsigned char);
+    required_buffer_size = (size_t)(w * h * Bpp) * sizeof(unsigned char);
     if(required_buffer_size > buffer_size) {
       buffer = MEM_REALLOC(&mem_default_allocator,buffer, required_buffer_size);
       NCHECK(buffer, NULL);

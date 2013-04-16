@@ -65,7 +65,7 @@ ft_to_font_error(FT_Error ft_err)
 static uint8_t
 sizeof_ft_pixel_mode(FT_Pixel_Mode mode)
 {
-  size_t size = 0;
+  uint8_t size = 0;
 
   switch(mode) {
     case FT_PIXEL_MODE_NONE:
@@ -97,14 +97,14 @@ copy_bitmap_pixel
 {
   const unsigned char* bmp_row = bitmap->buffer + y * bitmap->pitch;
   const unsigned char* bmp_byte = NULL;
-  size_t bit_shift = 0;
+  int bit_shift = 0;
   const char mode = bitmap->pixel_mode;
 
   switch(mode) {
     case FT_PIXEL_MODE_MONO:
       bmp_byte = bmp_row + x / 8;
       bit_shift = 7 - x % 8;
-      *pixel = (((*bmp_byte) >> bit_shift) & 0x01) * 255;
+      *pixel = (unsigned char)((((*bmp_byte) >> bit_shift) & 0x01) * 255);
       break;
     case FT_PIXEL_MODE_GRAY:
       bmp_byte = bmp_row + x;
@@ -113,12 +113,12 @@ copy_bitmap_pixel
     case FT_PIXEL_MODE_GRAY2:
       bmp_byte = bmp_row + x / 4;
       bit_shift = (3 - x % 4) * 2;
-      *pixel = (((*bmp_byte) >> bit_shift) & 0x03) * 85;
+      *pixel = (unsigned char)((((*bmp_byte) >> bit_shift) & 0x03) * 85);
       break;
     case FT_PIXEL_MODE_GRAY4:
       bmp_byte = bmp_row + x / 2;
       bit_shift = (1 - x % 2) * 4;
-      *pixel = (((*bmp_byte) >> bit_shift) & 0x0F) * 17;
+      *pixel = (unsigned char)((((*bmp_byte) >> bit_shift) & 0x0F) * 17);
       break;
     case FT_PIXEL_MODE_LCD:
     case FT_PIXEL_MODE_LCD_V:
@@ -361,10 +361,10 @@ font_rsrc_get_line_space(const struct font_rsrc* font, uint16_t* line_space)
     const signed long height = font->ft_face->size->metrics.height >> 6;
     if(height < 0 || height > UINT16_MAX)
       return FONT_MEMORY_ERROR;
-    *line_space = height;
+    *line_space = (uint16_t)height;
   } else {
     ASSERT(font->ft_face->num_fixed_sizes != 0);
-    *line_space = font->ft_face->available_sizes[0].height;
+    *line_space = (uint16_t)font->ft_face->available_sizes[0].height;
   }
   return FONT_NO_ERROR;
 }
@@ -398,7 +398,7 @@ font_rsrc_get_glyph
     font_err = FONT_INVALID_ARGUMENT;
     goto error;
   }
-  glyph_index = FT_Get_Char_Index(font->ft_face, ch);
+  glyph_index = FT_Get_Char_Index(font->ft_face, (FT_ULong)ch);
   if(0 == glyph_index) {
     font_err = FONT_INVALID_ARGUMENT;
     goto error;
@@ -417,10 +417,10 @@ font_rsrc_get_glyph
   FT(Get_Glyph(font->ft_face->glyph, &glyph->ft_glyph));
 
   FT_Glyph_Get_CBox(glyph->ft_glyph, FT_GLYPH_BBOX_PIXELS, &box);
-  glyph->bbox.x_min = box.xMin;
-  glyph->bbox.y_min = box.yMin;
-  glyph->bbox.x_max = box.xMax;
-  glyph->bbox.y_max = box.yMax;
+  glyph->bbox.x_min = (int)box.xMin;
+  glyph->bbox.y_min = (int)box.yMin;
+  glyph->bbox.x_max = (int)box.xMax;
+  glyph->bbox.y_max = (int)box.yMax;
 
 exit:
   if(out_glyph)
@@ -478,16 +478,16 @@ font_glyph_get_bitmap
   Bpp = sizeof_ft_pixel_mode(bmp->pixel_mode);
 
   if(width)
-    *width = bmp->width;
+    *width = (uint16_t)bmp->width;
   if(height)
-    *height = bmp->rows;
+    *height = (uint16_t)bmp->rows;
   if(bytes_per_pixel)
     *bytes_per_pixel = Bpp;
   if(buffer) {
-    const size_t pitch = Bpp * bmp->width;
+    const size_t pitch = (size_t)(Bpp * bmp->width);
     int x, y;
     for(y = 0; y < bmp->rows; ++y) {
-      unsigned char* row = buffer + y * pitch;
+      unsigned char* row = buffer + (size_t)y * pitch;
       for(x = 0; x < bmp->width; ++x) {
         unsigned char* pixel = row + x * Bpp;
         copy_bitmap_pixel(bmp, x, y, pixel);
@@ -518,7 +518,7 @@ font_glyph_get_desc
   const signed long ft_width = (glyph->ft_glyph->advance.x) >> 16;
 
   ASSERT(ft_width <= UINT16_MAX);
-  desc->width =  ft_width;
+  desc->width =  (uint16_t)ft_width;
   return FONT_NO_ERROR;
 }
 
