@@ -87,13 +87,13 @@ font_rsrc_load
 FONT_API enum font_error
 font_rsrc_set_size
   (struct font_rsrc* font,
-   const uint16_t width,  /* In pixels */
-   const uint16_t height); /* In pixels */
+   const int width,  /* In pixels */
+   const int height); /* In pixels */
 
 FONT_API enum font_error
 font_rsrc_get_line_space
   (const struct font_rsrc* font,
-   uint16_t* line_space); /* In pixels */
+   int* line_space); /* In pixels */
 
 FONT_API enum font_error
 font_rsrc_is_scalable
@@ -117,7 +117,7 @@ struct font_glyph_desc {
     int x_max;
     int y_max;
   } bbox;
-  uint16_t width;
+  int width;
   wchar_t character;
 };
 
@@ -143,9 +143,9 @@ FONT_API enum font_error
 font_glyph_get_bitmap
   (struct font_glyph* glyph,
    const bool antialiasing,
-   uint16_t* width, /* May be NULL */
-   uint16_t* height, /* May be NULL */
-   uint8_t* bytes_per_pixel, /* May be NULL */
+   int* width, /* May be NULL */
+   int* height, /* May be NULL */
+   int* bytes_per_pixel, /* May be NULL */
    unsigned char* buffer); /* May be NULL */
 
 FONT_API enum font_error

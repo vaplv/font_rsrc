@@ -62,10 +62,10 @@ ft_to_font_error(FT_Error ft_err)
   return font_err;
 }
 
-static uint8_t
+static int
 sizeof_ft_pixel_mode(FT_Pixel_Mode mode)
 {
-  uint8_t size = 0;
+  int size = 0;
 
   switch(mode) {
     case FT_PIXEL_MODE_NONE:
@@ -335,8 +335,8 @@ error:
 enum font_error
 font_rsrc_set_size
   (struct font_rsrc* font,
-   const uint16_t width,
-   const uint16_t height)
+   const int width,
+   const int height)
 {
   if(!font || !width || !height)
     return FONT_INVALID_ARGUMENT;
@@ -344,14 +344,13 @@ font_rsrc_set_size
      return FONT_INVALID_CALL;
 
   /* Ensure that that the API and the FT library are compatible. */
-  STATIC_ASSERT(sizeof(uint16_t) <= sizeof(FT_UInt), Unexpected_type_size);
-
-  FT(Set_Pixel_Sizes(font->ft_face, width, height));
+  STATIC_ASSERT(sizeof(int) <= sizeof(FT_UInt), Unexpected_type_size);
+  FT(Set_Pixel_Sizes(font->ft_face, (FT_UInt)width, (FT_UInt)height));
   return FONT_NO_ERROR;
 }
 
 enum font_error
-font_rsrc_get_line_space(const struct font_rsrc* font, uint16_t* line_space)
+font_rsrc_get_line_space(const struct font_rsrc* font, int* line_space)
 {
   if(!font || !line_space)
     return FONT_INVALID_ARGUMENT;
@@ -361,10 +360,10 @@ font_rsrc_get_line_space(const struct font_rsrc* font, uint16_t* line_space)
     const signed long height = font->ft_face->size->metrics.height >> 6;
     if(height < 0 || height > UINT16_MAX)
       return FONT_MEMORY_ERROR;
-    *line_space = (uint16_t)height;
+    *line_space = (int)height;
   } else {
     ASSERT(font->ft_face->num_fixed_sizes != 0);
-    *line_space = (uint16_t)font->ft_face->available_sizes[0].height;
+    *line_space = (int)font->ft_face->available_sizes[0].height;
   }
   return FONT_NO_ERROR;
 }
@@ -456,13 +455,13 @@ enum font_error
 font_glyph_get_bitmap
   (struct font_glyph* glyph,
    bool antialiasing,
-   uint16_t* width,
-   uint16_t* height,
-   uint8_t* bytes_per_pixel,
+   int* width,
+   int* height,
+   int* bytes_per_pixel,
    unsigned char* buffer)
 {
   const FT_Bitmap* bmp = NULL;
-  uint8_t Bpp = 0;
+  int Bpp = 0;
   enum font_error font_err = FONT_NO_ERROR;
 
   if(!glyph) {
@@ -478,9 +477,9 @@ font_glyph_get_bitmap
   Bpp = sizeof_ft_pixel_mode(bmp->pixel_mode);
 
   if(width)
-    *width = (uint16_t)bmp->width;
+    *width = (int)bmp->width;
   if(height)
-    *height = (uint16_t)bmp->rows;
+    *height = (int)bmp->rows;
   if(bytes_per_pixel)
     *bytes_per_pixel = Bpp;
   if(buffer) {
@@ -517,8 +516,8 @@ font_glyph_get_desc
   /* 16.16 Fixed point */
   const signed long ft_width = (glyph->ft_glyph->advance.x) >> 16;
 
-  ASSERT(ft_width <= UINT16_MAX);
-  desc->width =  (uint16_t)ft_width;
+  ASSERT(ft_width <= INT_MAX);
+  desc->width =  (int)ft_width;
   return FONT_NO_ERROR;
 }
 

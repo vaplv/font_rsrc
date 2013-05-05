@@ -19,10 +19,10 @@ main(int argc, char** argv)
   const char* path = NULL;
   unsigned char* buffer = NULL;
   size_t buffer_size = 0;
-  uint16_t h = 0;
-  uint16_t w = 0;
-  uint8_t Bpp = 0;
-  uint16_t i = 0;
+  int h = 0;
+  int w = 0;
+  int Bpp = 0;
+  int i = 0;
   bool b = false;
 
   if(argc != 2) {
@@ -91,9 +91,9 @@ main(int argc, char** argv)
   NCHECK(Bpp, 0);
 
   buffer = MEM_CALLOC
-    (&mem_default_allocator, (size_t)w*h*Bpp, sizeof(unsigned char));
+    (&mem_default_allocator, (size_t)(w*h*Bpp), sizeof(unsigned char));
   NCHECK(buffer, NULL);
-  buffer_size = (size_t)(w * h * Bpp) * sizeof(unsigned char);
+  buffer_size = (size_t)(w*h*Bpp) * sizeof(unsigned char);
 
   CHECK(font_glyph_get_bitmap(glyph, false, NULL, NULL, NULL, buffer), OK);
   CHECK(font_glyph_get_bitmap(glyph, false, &w, NULL, NULL, buffer), OK);
