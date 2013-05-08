@@ -341,7 +341,7 @@ font_rsrc_set_size
   if(!font || !width || !height)
     return FONT_INVALID_ARGUMENT;
   if(!FT_IS_SCALABLE(font->ft_face))
-     return FONT_INVALID_CALL;
+     return FONT_INVALID_ARGUMENT;
 
   /* Ensure that that the API and the FT library are compatible. */
   STATIC_ASSERT(sizeof(int) <= sizeof(FT_UInt), Unexpected_type_size);

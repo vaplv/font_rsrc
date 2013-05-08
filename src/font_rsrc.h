@@ -21,7 +21,6 @@ struct mem_allocator;
 enum font_error {
   FONT_INTERNAL_ERROR,
   FONT_INVALID_ARGUMENT,
-  FONT_INVALID_CALL,
   FONT_MEMORY_ERROR,
   FONT_NO_ERROR
 };
